@@ -1,0 +1,90 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/StyleSheets/MenuStyleSheet.uss" />
+    <ui:VisualElement name="Container" class="background-1" style="width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;">
+        <ui:VisualElement name="C1" style="flex-direction: row; align-items: center; justify-content: center;">
+            <ui:VisualElement name="ColourSliders" class="background-2" style="border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; margin-left: 3px; margin-right: 3px; height: 100%; width: 200px;">
+                <ui:VisualElement name="RedColourPicker" style="align-items: center; flex-direction: row; justify-content: center;">
+                    <ui:Slider picking-mode="Ignore" label="Red" value="0.5" high-value="1" focusable="false" name="RedSlider" style="width: 177px; justify-content: space-between; align-items: flex-start; flex-direction: column; min-height: 60px; padding-top: 0; padding-bottom: 0; margin-bottom: 0; margin-top: 0;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="GreenColourPicker" style="align-items: center; flex-direction: row; justify-content: center;">
+                    <ui:Slider picking-mode="Ignore" label="Green" value="0.5" high-value="1" focusable="false" name="GreenSlider" style="width: 177px; justify-content: space-between; align-items: flex-start; flex-direction: column; min-height: 60px; padding-bottom: 0; padding-top: 0; margin-bottom: 0; margin-top: 0;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="BlueColourPicker" style="align-items: center; flex-direction: row; justify-content: center;">
+                    <ui:Slider picking-mode="Ignore" label="Blue" value="0.5" high-value="1" focusable="false" name="BlueSlider" style="width: 177px; justify-content: space-between; align-items: flex-start; flex-direction: column; min-height: 60px; padding-bottom: 0; padding-top: 0; margin-bottom: 0; margin-top: 0;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="TranparencyPicker" style="align-items: center; flex-direction: row; justify-content: center;">
+                    <ui:Slider picking-mode="Ignore" label="Transparency" value="1" high-value="1" focusable="false" name="TransparencySlider" style="width: 177px; justify-content: space-between; align-items: flex-start; flex-direction: column; min-height: 60px; padding-bottom: 0; padding-top: 0; margin-bottom: 0; margin-top: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="ColourSample" style="width: 200px; height: 100%; background-color: rgb(255, 255, 255); align-items: center; justify-content: center; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px;">
+                <ui:VisualElement name="ColourSampleDisplay" style="width: 175px; height: 175px; background-color: rgb(128, 128, 128); border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;" />
+                <ui:VisualElement>
+                    <ui:TextField picking-mode="Ignore" label="Hex Code" value="filler text" text="filler text" name="HexCode" class="background-2" style="flex-direction: column; align-items: stretch; justify-content: center; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; margin-top: 3px; margin-bottom: 0; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="background-2" style="border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; height: 100%; justify-content: center; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; width: 200px;">
+                <ui:VisualElement class="background-1" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Text on background 1." display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="background-2" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Text on background 2." display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="background-3" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Text on background 3." display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="background-4" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Text on background 4." display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="background-5" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Start Colour" display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="background-6" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Goal Colour" display-tooltip-when-elided="true" focusable="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="background-7" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Mini Map Background." display-tooltip-when-elided="true" enable-rich-text="false" />
+                </ui:VisualElement>
+                <ui:VisualElement class="background-8" style="border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(24, 26, 27); border-right-color: rgb(24, 26, 27); border-top-color: rgb(24, 26, 27); border-bottom-color: rgb(24, 26, 27); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Mini Map Foreground." display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="background-2" style="height: 100%; justify-content: flex-start; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;">
+                <ui:RadioButtonGroup label="Apply Colour To" value="0" name="ColourApplyGroup" style="flex-direction: column; align-items: flex-end; -unity-font-style: bold;">
+                    <ui:RadioButton label="None" value="true" name="ApplyNone" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Text &amp; Player Icon" name="ApplyText" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Background 1" name="ApplyBackground1" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Background 2" name="ApplyBackground2" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Background 3" name="ApplyBackground3" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Background 4" value="false" focusable="false" name="ApplyBackground4" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Start Colour" name="ApplyBackground5" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Goal Colour" name="ApplyBackground6" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Mini Map Background" name="ApplyBackground7" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Mini Map Foreground" value="false" focusable="false" name="ApplyBackground8" style="-unity-font-style: normal;" />
+                </ui:RadioButtonGroup>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="background-2" style="flex-direction: row; align-items: center; justify-content: center; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;">
+            <ui:VisualElement class="background-4" style="justify-content: center; align-items: stretch; height: 100%; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;">
+                <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitMenu" class="background-3" style="border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
+                <ui:Button text="Reset" display-tooltip-when-elided="true" enable-rich-text="true" name="ResetColours" class="background-3" />
+            </ui:VisualElement>
+            <ui:VisualElement style="height: 100%;">
+                <ui:RadioButtonGroup label="Colour Applicator Mode" value="0" name="BehaviourGroup" style="flex-direction: column; align-items: center; -unity-font-style: bold;">
+                    <ui:RadioButton label="Sample Mode" value="true" name="SampleMode" style="-unity-font-style: normal;" />
+                    <ui:RadioButton label="Override Mode" name="OverrideMode" style="-unity-font-style: normal;" />
+                </ui:RadioButtonGroup>
+                <ui:VisualElement style="margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Minimap Options" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; -unity-font-style: bold;" />
+                    <ui:RadioButtonGroup value="-1" style="flex-direction: column;">
+                        <ui:RadioButton label="Minimap Off" name="MiniMapOff" />
+                        <ui:RadioButton label="Minimap On" name="MinMapOnOff" value="true" />
+                    </ui:RadioButtonGroup>
+                    <ui:RadioButtonGroup value="-1" style="flex-direction: column;">
+                        <ui:RadioButton label="Minimap Path Off" name="MiniMapPathOff" />
+                        <ui:RadioButton label="Minimap Path On" name="MinMapPathOnOff" value="true" />
+                    </ui:RadioButtonGroup>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
