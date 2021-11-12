@@ -4,3 +4,5 @@ It also contains a Maze Game using the same colour changing options for maze nav
 This was a project made to meet college work.
 
 The maze is randomly generated and is accelerated by DOTS (Burst and C# Jobs).
+
+This project is currently using Unity 2021.1.28f1
