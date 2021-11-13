@@ -72,15 +72,16 @@ public class MazeConstructorWithBurst : MonoBehaviour
         MiniMapForegroundColour = e.background8Current;
         NavigationArrowColour = e.textCurrent;
     }
-
-    public void GenerateNewMaze(int cellsZ, int cellsX, TriggerEventHandler startCallBack = null, TriggerEventHandler endCallBack = null)
+    //ResetPathColour();
+    //CyclePathColour();
+    public void GenerateNewMaze(int cellsZ, int cellsX, 
+        TriggerEventHandler startCallBack = null, TriggerEventHandler endCallBack = null)
     {
-        float start = Time.realtimeSinceStartup;
-        ResetPathColour();
         if (cellsZ % 2 == 0 && cellsX % 2 == 0)
         {
             Debug.LogWarning("Odd numbers work better for maze size.");
         }
+
         NativeList<float3> outputData = new NativeList<float3>(2, Allocator.TempJob);
         Mesh.MeshDataArray meshes = Mesh.AllocateWritableMeshData(2);
         MazeJob createMazeJob = new MazeJob
@@ -113,15 +114,13 @@ public class MazeConstructorWithBurst : MonoBehaviour
 
         startObj.position = StartPosition = new float3(outputData[0].x, 0.5f, outputData[0].z);
         endObj.position = EndPosition = new float3(outputData[1].x, 0.5f, outputData[1].z);
-
-        outputData.RemoveAt(0);
-        outputData.RemoveAt(0);
-
         startObjMiniMap.position = new Vector3(StartPosition.x, -25, StartPosition.z);
         endObjMiniMap.position = new Vector3(EndPosition.x, -25, EndPosition.z);
 
-        CyclePathColour();
-        Debug.Log(outputData.Length);
+        outputData.RemoveAt(0);
+        outputData.RemoveAt(0);
+
+        //Debug.Log(outputData.Length);
         pathPlotter.positionCount = outputData.Length;
         pathPlotter.SetPositions(outputData.AsArray().Reinterpret<Vector3>());
 
@@ -131,7 +130,6 @@ public class MazeConstructorWithBurst : MonoBehaviour
         endObj.GetComponent<TriggerEventRouter>().callback = endCallBack;
 
         ShowEnd();
-        Debug.Log("Total Maze Time " + (Time.realtimeSinceStartup - start) * 1000f + "ms");
     }
 
     public void HideEnd()
@@ -244,11 +242,12 @@ public class MazeConstructorWithBurst : MonoBehaviour
                 }
             }
 
-
+            // common vertex attrubyte descriptor array.
             NativeArray<VertexAttributeDescriptor> VertexDescriptors = new NativeArray<VertexAttributeDescriptor>(2, Allocator.Temp);
             VertexDescriptors[0] = new VertexAttributeDescriptor(VertexAttribute.Position, VertexAttributeFormat.Float32, 3, 0);
             VertexDescriptors[1] = new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 2, 1);
-
+            
+            // floor and ceiling mesh
             Mesh.MeshData meshData = meshDataArray[0];
             meshData.SetVertexBufferParams(floorCeilingVertex.Length, VertexDescriptors);
             meshData.SetIndexBufferParams(floorCeilingTriangles.Length, IndexFormat.UInt32);
@@ -257,7 +256,8 @@ public class MazeConstructorWithBurst : MonoBehaviour
             meshData.GetIndexData<uint>().CopyFrom(floorCeilingTriangles);
             meshData.subMeshCount = 1;
             meshData.SetSubMesh(0, new SubMeshDescriptor(0, floorCeilingTriangles.Length, MeshTopology.Triangles));
-
+            
+            // wall mesh
             meshData = meshDataArray[1];
             meshData.SetVertexBufferParams(wallVertex.Length, VertexDescriptors);
             meshData.SetIndexBufferParams(wallTriangles.Length, IndexFormat.UInt32);
@@ -266,7 +266,12 @@ public class MazeConstructorWithBurst : MonoBehaviour
             meshData.GetIndexData<uint>().CopyFrom(wallTriangles);
             meshData.subMeshCount = 1;
             meshData.SetSubMesh(0, new SubMeshDescriptor(0, wallTriangles.Length, MeshTopology.Triangles));
-
+            floorCeilingVertex.Dispose();
+            floorCeilingVertexUV.Dispose();
+            floorCeilingTriangles.Dispose();
+            wallTriangles.Dispose();
+            wallVertexUV.Dispose();
+            wallVertex.Dispose();
             VertexDescriptors.Dispose();
             #endregion
             #region StartAndEndPositions
@@ -279,6 +284,24 @@ public class MazeConstructorWithBurst : MonoBehaviour
             }
             endAndStartPositions.Add(cells[startIndex].UsablePosition);
             endAndStartPositions.Add(cells[endIndex].UsablePosition);
+            
+            if (Search(cells, startIndex, endIndex))
+            {
+                Cell current = cells[endIndex];
+                while (current.Index != startIndex)
+                {
+                    endAndStartPositions.Add(new float3(current.UsablePosition.x, -25, current.UsablePosition.z));
+                    current = cells[current.PathFrom];
+                }
+                current = cells[startIndex];
+                endAndStartPositions.Add(new float3(current.UsablePosition.x, -25, current.UsablePosition.z));
+            }
+            cells.Dispose();
+            #endregion
+        }
+
+        private bool Search(NativeArray<Cell> cells, int startIndex, int endIndex)
+        {
             NativeArray<CellQueueElement> searchCells = new NativeArray<CellQueueElement>(cells.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
             for (int cellIndex = 0; cellIndex < cells.Length; cellIndex++)
             {
@@ -290,31 +313,12 @@ public class MazeConstructorWithBurst : MonoBehaviour
                     Distance = 0
                 };
             }
-
             CellPriorityQueue searchFrontier = new CellPriorityQueue(searchCells);
-            if (Search(cells, searchFrontier, 2, startIndex, endIndex))
-            {
-                Cell current = cells[endIndex];
-                while (current.Index != startIndex)
-                {
-                    endAndStartPositions.Add(new float3(current.UsablePosition.x, -25, current.UsablePosition.z));
-                    current = cells[current.PathFrom];
-                }
-                current = cells[startIndex];
-                endAndStartPositions.Add(new float3(current.UsablePosition.x, -25, current.UsablePosition.z));
-            }
-            searchFrontier.Dispose();
-            cells.Dispose();
-            #endregion
-        }
-
-        private bool Search(NativeArray<Cell> cells, CellPriorityQueue searchFrontier, int searchFrontierPhase, int startIndex, int endIndex)
-        {
             Cell toCell = cells[endIndex];
             int speed = 24;
             CellQueueElement firstCellElement = searchFrontier.elements[startIndex];
             firstCellElement.Distance = 0;
-            firstCellElement.SearchPhase = searchFrontierPhase;
+            int searchFrontierPhase = firstCellElement.SearchPhase = 2;
             searchFrontier.Enqueue(firstCellElement);
             while (searchFrontier.Count > 0)
             {
@@ -325,6 +329,7 @@ public class MazeConstructorWithBurst : MonoBehaviour
                 searchFrontier.elements[elementIndex] = currentElement;
                 if (current.Equals(toCell))
                 {
+                    searchFrontier.Dispose();
                     return true;
                 }
                 int currentTurn = (currentElement.Distance - 1) / speed;
@@ -365,6 +370,7 @@ public class MazeConstructorWithBurst : MonoBehaviour
                     cells[neighbour.Index] = neighbour;
                 }
             }
+            searchFrontier.Dispose();
             return false;
         }
 

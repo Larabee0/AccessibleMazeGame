@@ -76,7 +76,9 @@ namespace GameObjectMaze
 
         private void StartNewMazeBurst()
         {
+            float start = Time.realtimeSinceStartup;
             generatorBurst.GenerateNewMaze(13, 15, OnStartTrigger, OnGoalTrigger);
+            Debug.Log("Total Maze Time " + (Time.realtimeSinceStartup - start) * 1000f + "ms");
             player.transform.position = new Vector3(generatorBurst.StartPosition.x, 1, generatorBurst.StartPosition.z);
             goalReached = false;
             player.charController.enabled = true;
@@ -156,8 +158,10 @@ namespace GameObjectMaze
             score += 1;
             scoreLabel.text = "Score\n"+ score.ToString();
             generatorBurst.HideEnd();
-            generatorBurst.CyclePathColour();
             //Destroy(trigger);
+
+
+            //generatorBurst.CyclePathColour();
         }
 
         private void OnStartTrigger(GameObject trigger, GameObject other)
@@ -170,7 +174,7 @@ namespace GameObjectMaze
 
                 player.charController.enabled = false;
                 StartNewMazeBurst();
-                //StartNewMaze();
+               // StartNewMaze();
             }
         }
     }
