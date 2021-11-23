@@ -13,7 +13,7 @@ namespace GameObjectMaze
         [SerializeField] private FpsMovement player;
         [SerializeField] private Text timeLabel;
         [SerializeField] private Text scoreLabel;
-        [SerializeField] private Color textColour = Color.white;
+        [SerializeField] private Color textColour;
         public Color TextColour
         {
             get
@@ -39,11 +39,11 @@ namespace GameObjectMaze
 
         private void Awake()
         {
-            instance = this;
             TextColour = textColour;
             colourMenu.OnNewColours += ColourChanged_OnChangedEvent;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            instance = this;
         }
 
         void Start()
@@ -114,7 +114,7 @@ namespace GameObjectMaze
             timeLimit -= reduceLimitBy;
             startTime = DateTime.Now;
         }
-
+        
         void Update()
         {
             if (Input.GetKeyUp(KeyCode.Escape))
@@ -129,6 +129,7 @@ namespace GameObjectMaze
                 {
                     SetMinimapSettings();
                 }
+
             }
             if (!player.enabled)
             {
@@ -158,10 +159,7 @@ namespace GameObjectMaze
             score += 1;
             scoreLabel.text = "Score\n"+ score.ToString();
             generatorBurst.HideEnd();
-            //Destroy(trigger);
-
-
-            //generatorBurst.CyclePathColour();
+            generatorBurst.CyclePathColour();
         }
 
         private void OnStartTrigger(GameObject trigger, GameObject other)
