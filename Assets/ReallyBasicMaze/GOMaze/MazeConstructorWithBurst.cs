@@ -31,13 +31,13 @@ public class MazeConstructorWithBurst : MonoBehaviour
     public float3 StartPosition;
     public float3 EndPosition;
 
-    [SerializeField] private Color lineStartColour = Color.green;
-    [SerializeField] private Color lineEndColour = Color.yellow;
+    [SerializeField] private Color lineStartColour;
+    [SerializeField] private Color lineEndColour;
     [SerializeField] private Color miniMapBackgroundColour;
-    [SerializeField] private Color miniMapForegroundColour = Color.black;
-    [SerializeField] private Color navigationArrowColour = Color.white;
-    public Color LineStartColour { get { return pathPlotter.startColor; } set { lineStartColour = pathPlotter.startColor = value; } }
-    public Color LineEndColour { get { return pathPlotter.endColor; } set { lineEndColour = pathPlotter.endColor = value; } }
+    [SerializeField] private Color miniMapForegroundColour;
+    [SerializeField] private Color navigationArrowColour;
+    public Color LineStartColour { get { return pathPlotter.startColor; } set { pathPlotter.startColor = value; } }
+    public Color LineEndColour { get { return pathPlotter.endColor; } set { pathPlotter.endColor = value; } }
     public Color MiniMapBackgroundColour { get { return miniMapBackground.color; } set { miniMapBackground.color = value; } }
     public Color MiniMapForegroundColour { get { return miniMapRenderer.material.color; } set { miniMapRenderer.material.color = value; } }
     public Color NavigationArrowColour { get { return NavigationArrow.color; } set { NavigationArrow.color = value; } }
@@ -66,14 +66,13 @@ public class MazeConstructorWithBurst : MonoBehaviour
 
     public void SetColours(ColourChangedEventArgs e)
     {
-        LineEndColour = startObj.GetComponent<MeshRenderer>().material.color = startObjMiniMap.GetComponent<MeshRenderer>().material.color = e.background5Current;
-        LineStartColour = endObj.GetComponent<MeshRenderer>().material.color = endObjMiniMap.GetComponent<MeshRenderer>().material.color = e.background6Current;
-        MiniMapBackgroundColour = e.background7Current;
-        MiniMapForegroundColour = e.background8Current;
-        NavigationArrowColour = e.textCurrent;
+        LineEndColour = lineEndColour = startObj.GetComponent<MeshRenderer>().material.color = startObjMiniMap.GetComponent<MeshRenderer>().material.color = e.background5Current;
+        LineStartColour = lineStartColour = endObj.GetComponent<MeshRenderer>().material.color = endObjMiniMap.GetComponent<MeshRenderer>().material.color = e.background6Current;
+        MiniMapBackgroundColour = miniMapBackgroundColour = e.background7Current;
+        MiniMapForegroundColour = miniMapForegroundColour = e.background8Current;
+        NavigationArrowColour = navigationArrowColour = e.textCurrent;
     }
-    //ResetPathColour();
-    //CyclePathColour();
+
     public void GenerateNewMaze(int cellsZ, int cellsX, 
         TriggerEventHandler startCallBack = null, TriggerEventHandler endCallBack = null)
     {
@@ -97,20 +96,7 @@ public class MazeConstructorWithBurst : MonoBehaviour
         JobHandle job = createMazeJob.Schedule(handle);
         job.Complete();
 
-        Mesh[] mazeMeshes = new Mesh[]
-        {
-            new Mesh(),
-            new Mesh()
-        };
-
-        Mesh.ApplyAndDisposeWritableMeshData(meshes, mazeMeshes);
-        mazeMeshes[0].RecalculateNormals();
-        mazeMeshes[0].RecalculateBounds();
-        mazeMeshes[1].RecalculateNormals();
-        mazeMeshes[1].RecalculateBounds();
-
-        floorsAndCeilingCol.sharedMesh = floorsAndCeiling.sharedMesh = miniMap.sharedMesh = mazeMeshes[0];
-        wallsCol.sharedMesh = walls.sharedMesh = mazeMeshes[1];
+        
 
         startObj.position = StartPosition = new float3(outputData[0].x, 0.5f, outputData[0].z);
         endObj.position = EndPosition = new float3(outputData[1].x, 0.5f, outputData[1].z);
@@ -121,13 +107,35 @@ public class MazeConstructorWithBurst : MonoBehaviour
         outputData.RemoveAt(0);
 
         //Debug.Log(outputData.Length);
+        
+        Mesh[] mazeMeshes = new Mesh[]
+        {
+            new Mesh(),
+            new Mesh()
+        };
+
+        Mesh.ApplyAndDisposeWritableMeshData(meshes, mazeMeshes);
+        if (outputData.Length == 0)
+        {
+            Debug.LogWarning("Path failed, regenerating maze");
+            outputData.Dispose();
+            GenerateNewMaze(cellsZ,cellsX,startCallBack,endCallBack);
+            return;
+        }
+        ResetPathColour();
         pathPlotter.positionCount = outputData.Length;
         pathPlotter.SetPositions(outputData.AsArray().Reinterpret<Vector3>());
-
-        outputData.Dispose();
-
         startObj.GetComponent<TriggerEventRouter>().callback = startCallBack;
         endObj.GetComponent<TriggerEventRouter>().callback = endCallBack;
+
+        outputData.Dispose();
+        mazeMeshes[0].RecalculateNormals();
+        mazeMeshes[0].RecalculateBounds();
+        mazeMeshes[1].RecalculateNormals();
+        mazeMeshes[1].RecalculateBounds();
+
+        floorsAndCeilingCol.sharedMesh = floorsAndCeiling.sharedMesh = miniMap.sharedMesh = mazeMeshes[0];
+        wallsCol.sharedMesh = walls.sharedMesh = mazeMeshes[1];
 
         ShowEnd();
     }
